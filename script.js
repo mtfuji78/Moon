@@ -51,38 +51,122 @@ fireworks();
 
 }
 
-// Fireworks
+// Realistic Fireworks 🎆
 
-const canvas=document.getElementById("fireworks");
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
 
-const ctx=canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
 
-canvas.width=innerWidth;
 
-canvas.height=innerHeight;
+window.onresize = () => {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+};
+
+
+let particles = [];
+
 
 function fireworks(){
 
-for(let i=0;i<80;i++){
+    let x = Math.random() * canvas.width;
+    let y = Math.random() * (canvas.height / 2);
 
-let x=Math.random()*canvas.width;
 
-let y=Math.random()*canvas.height/2;
+    let colors = [
+        "#ff80b6",
+        "#ffd1e5",
+        "#ffffff",
+        "#ff4e94",
+        "#ffe066",
+        "#a8e6ff"
+    ];
 
-ctx.beginPath();
 
-ctx.arc(x,y,3,0,Math.PI*2);
+    for(let i = 0; i < 100; i++){
 
-ctx.fillStyle=`hsl(${Math.random()*360},100%,70%)`;
+        let angle = Math.random() * Math.PI * 2;
+        let speed = Math.random() * 6 + 2;
 
-ctx.fill();
+
+        particles.push({
+
+            x:x,
+            y:y,
+
+            dx:Math.cos(angle) * speed,
+            dy:Math.sin(angle) * speed,
+
+            size:Math.random()*3+1,
+
+            color:colors[Math.floor(Math.random()*colors.length)],
+
+            life:100
+
+        });
+
+    }
+
+
+    animateFireworks();
 
 }
 
-setTimeout(()=>{
 
-ctx.clearRect(0,0,canvas.width,canvas.height);
 
-},1200);
+function animateFireworks(){
+
+    requestAnimationFrame(animateFireworks);
+
+
+    ctx.fillStyle="rgba(255,245,251,0.2)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+
+    particles.forEach((p,index)=>{
+
+
+        p.x += p.dx;
+        p.y += p.dy;
+
+
+        p.dy += 0.05; // gravity
+
+
+        p.life--;
+
+
+        ctx.beginPath();
+
+        ctx.arc(
+            p.x,
+            p.y,
+            p.size,
+            0,
+            Math.PI*2
+        );
+
+
+        ctx.fillStyle=p.color;
+
+        ctx.globalAlpha=p.life/100;
+
+        ctx.fill();
+
+
+
+        if(p.life <= 0){
+
+            particles.splice(index,1);
+
+        }
+
+
+    });
+
+
+    ctx.globalAlpha=1;
 
 }
