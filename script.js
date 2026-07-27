@@ -1,69 +1,78 @@
-const stars=document.getElementById("stars");
-const hearts=document.getElementById("hearts");
-const letter=document.getElementById("letter");
-const button=document.getElementById("giftBtn");
+const stars = document.getElementById("stars");
+const hearts = document.getElementById("hearts");
+const letter = document.getElementById("letter");
+const button = document.getElementById("giftBtn");
 
-// Stars
 
-for(let i=0;i<120;i++){
+// Stars ⭐
 
-let s=document.createElement("div");
+for(let i = 0; i < 120; i++){
 
-s.className="star";
+    let s = document.createElement("div");
 
-s.style.left=Math.random()*100+"%";
+    s.className = "star";
 
-s.style.top=Math.random()*100+"%";
+    s.style.left = Math.random() * 100 + "%";
+    s.style.top = Math.random() * 100 + "%";
 
-s.style.animationDelay=Math.random()*3+"s";
+    s.style.animationDelay = Math.random() * 3 + "s";
 
-stars.appendChild(s);
-
-}
-
-// Hearts
-
-for(let i=0;i<25;i++){
-
-let h=document.createElement("div");
-
-h.className="heart";
-
-h.innerHTML="♡";
-
-h.style.left=Math.random()*100+"%";
-
-h.style.animationDuration=(5+Math.random()*6)+"s";
-
-h.style.animationDelay=Math.random()*5+"s";
-
-h.style.fontSize=(18+Math.random()*18)+"px";
-
-hearts.appendChild(h);
+    stars.appendChild(s);
 
 }
 
-button.onclick=()=>{
 
-letter.style.display="block";
+// Hearts ♡
 
-fireworks();
+for(let i = 0; i < 25; i++){
+
+    let h = document.createElement("div");
+
+    h.className = "heart";
+
+    h.innerHTML = "♡";
+
+    h.style.left = Math.random() * 100 + "%";
+
+    h.style.animationDuration = (5 + Math.random() * 6) + "s";
+
+    h.style.animationDelay = Math.random() * 5 + "s";
+
+    h.style.fontSize = (18 + Math.random() * 18) + "px";
+
+    hearts.appendChild(h);
 
 }
 
-// Realistic Fireworks 🎆
+
+// Fireworks button 🎀
+
+button.onclick = () => {
+
+    letter.style.display = "block";
+
+    fireworks();
+
+};
+
+
+
+// Fireworks 🎆
 
 const canvas = document.getElementById("fireworks");
 const ctx = canvas.getContext("2d");
 
-canvas.width = innerWidth;
-canvas.height = innerHeight;
 
+function resizeCanvas(){
 
-window.onresize = () => {
-    canvas.width = innerWidth;
-    canvas.height = innerHeight;
-};
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+}
+
+resizeCanvas();
+
+window.addEventListener("resize", resizeCanvas);
 
 
 let particles = [];
@@ -72,7 +81,7 @@ let particles = [];
 function fireworks(){
 
     let x = Math.random() * canvas.width;
-    let y = Math.random() * (canvas.height / 2);
+    let y = Math.random() * (canvas.height * 0.5);
 
 
     let colors = [
@@ -80,8 +89,7 @@ function fireworks(){
         "#ffd1e5",
         "#ffffff",
         "#ff4e94",
-        "#ffe066",
-        "#a8e6ff"
+        "#ffe066"
     ];
 
 
@@ -99,11 +107,11 @@ function fireworks(){
             dx:Math.cos(angle) * speed,
             dy:Math.sin(angle) * speed,
 
-            size:Math.random()*3+1,
+            size:Math.random() * 3 + 1,
 
             color:colors[Math.floor(Math.random()*colors.length)],
 
-            life:70
+            life:60
 
         });
 
@@ -112,22 +120,30 @@ function fireworks(){
 }
 
 
-
 function animateFireworks(){
 
     requestAnimationFrame(animateFireworks);
 
-    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
 
 
     particles.forEach((p,index)=>{
 
+
         p.x += p.dx;
         p.y += p.dy;
 
-        p.dy += 0.05; // gravity
 
-        p.life -= 2;
+        p.dy += 0.05;
+
+
+        p.life--;
 
 
         ctx.beginPath();
@@ -137,13 +153,13 @@ function animateFireworks(){
             p.y,
             p.size,
             0,
-            Math.PI*2
+            Math.PI * 2
         );
 
 
         ctx.fillStyle = p.color;
 
-        ctx.globalAlpha = (p.life / 70) * 0.7;
+        ctx.globalAlpha = p.life / 60;
 
         ctx.fill();
 
@@ -154,15 +170,8 @@ function animateFireworks(){
 
         }
 
+
     });
-
-
-    // clear canvas when fireworks are gone
-    if(particles.length === 0){
-
-        ctx.clearRect(0,0,canvas.width,canvas.height);
-
-    }
 
 
     ctx.globalAlpha = 1;
