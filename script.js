@@ -122,11 +122,10 @@ function animateFireworks(){
 
     particles.forEach((p,index)=>{
 
-
         p.x += p.dx;
         p.y += p.dy;
 
-        p.dy += 0.05;
+        p.dy += 0.05; // gravity
 
         p.life -= 2;
 
@@ -155,8 +154,15 @@ function animateFireworks(){
 
         }
 
-
     });
+
+
+    // clear canvas when fireworks are gone
+    if(particles.length === 0){
+
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    }
 
 
     ctx.globalAlpha = 1;
