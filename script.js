@@ -85,10 +85,10 @@ function fireworks(){
     ];
 
 
-    for(let i = 0; i < 100; i++){
+    for(let i = 0; i < 60; i++){
 
         let angle = Math.random() * Math.PI * 2;
-        let speed = Math.random() * 6 + 2;
+        let speed = Math.random() * 4 + 1;
 
 
         particles.push({
@@ -103,14 +103,11 @@ function fireworks(){
 
             color:colors[Math.floor(Math.random()*colors.length)],
 
-            life:100
+            life:70
 
         });
 
     }
-
-
-    animateFireworks();
 
 }
 
@@ -120,9 +117,7 @@ function animateFireworks(){
 
     requestAnimationFrame(animateFireworks);
 
-
-    ctx.fillStyle="rgba(255,245,251,0.2)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
 
     particles.forEach((p,index)=>{
@@ -131,11 +126,9 @@ function animateFireworks(){
         p.x += p.dx;
         p.y += p.dy;
 
+        p.dy += 0.05;
 
-        p.dy += 0.05; // gravity
-
-
-        p.life--;
+        p.life -= 2;
 
 
         ctx.beginPath();
@@ -149,12 +142,11 @@ function animateFireworks(){
         );
 
 
-        ctx.fillStyle=p.color;
+        ctx.fillStyle = p.color;
 
-        ctx.globalAlpha=p.life/100;
+        ctx.globalAlpha = (p.life / 70) * 0.7;
 
         ctx.fill();
-
 
 
         if(p.life <= 0){
@@ -167,6 +159,9 @@ function animateFireworks(){
     });
 
 
-    ctx.globalAlpha=1;
+    ctx.globalAlpha = 1;
 
 }
+
+
+animateFireworks();
